@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@import url('https://fonts.cdnfonts.com/css/sharp-sans');
+
+
+body{
+    background-color: #141414;
+}
+
+
