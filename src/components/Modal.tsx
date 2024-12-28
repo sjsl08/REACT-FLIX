@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Play, Volume2, VolumeOff, Check, Plus, ThumbsUp } from 'lucide-react';
 // import SimilarMovieCard from './SimilarMovieCard'; // Ensure this component is imported
 import { useNavigate } from 'react-router-dom';
+import { tmdbApi } from '../tmdbApi';
+import VideoPlayer from './VideoPlayer';
 
 interface ModalProps {
     isOpen: boolean;
@@ -21,7 +23,6 @@ const Modal: React.FC<ModalProps> = ({
     isOpen,
     onClose,
     movieData,
-    videoId,
     muted = true,
     toggleMuteVideo,
     handleAddToFav,
@@ -32,6 +33,23 @@ const Modal: React.FC<ModalProps> = ({
 }) => {
     const navigate = useNavigate();
 
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+            await tmdbApi.getMovieTrailer(movieData?.id).then((res) => {
+                console.log(res);
+                
+                setvideoId(res.key);
+            })
+        }
+
+        fetchData();
+
+    },[])
+
+
+    const [videoId, setvideoId] = useState('')
   
 
     if (!isOpen) return null;
@@ -95,7 +113,7 @@ const Modal: React.FC<ModalProps> = ({
                             </button>
                         </div>
 
-                        <Player videoId={videoId} isMuted={muted} />
+                        <VideoPlayer videoId={videoId} isMuted={muted} />
                     </div>
                 ) : (
                     <div className="flex justify-center items-center h-64 bg-gray-800">

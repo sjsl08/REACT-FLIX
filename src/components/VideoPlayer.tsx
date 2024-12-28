@@ -14,9 +14,10 @@ interface VideoPlayerProps {
   videoId: string;
   isMuted?: boolean;
   toggleMute?: () => void;
+  pip?: boolean;
 }
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, isMuted, toggleMute }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, isMuted, toggleMute, pip }) => {
   const location = useLocation();
   const playerRef = useRef<ReactPlayer>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -76,7 +77,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, isMuted, toggleMute 
   return (
     <div
       ref={containerRef}
-      className={`relative h-screen bg-black flex justify-center items-center ${
+      className={`relative ${pip ? 'h-[150px]' : 'h-screen'} bg-black flex justify-center items-center ${
         location.pathname.startsWith('/watch') ? 'scale-100' : 'scale-150'
       }`}
       onMouseMove={handleMouseMove}
@@ -104,7 +105,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, isMuted, toggleMute 
       />
 
       {/* Custom Controls */}
-      {showControls && (
+      {showControls && !pip && (
         <div className="absolute bottom-4 left-0 right-0 flex justify-between items-center bg-black/70 py-3 px-6 rounded-lg transition-opacity duration-300">
           {/* Play/Pause Button */}
           <button

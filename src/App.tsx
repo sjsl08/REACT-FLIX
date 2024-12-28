@@ -8,13 +8,17 @@ import Navbar from './components/Navbar';
 import { MovieProvider } from './context/MovieContext';
 import Modal from './components/Modal';
 import { useMovieContext } from './context/MovieContext'; // Import the context
+import { CardProvider, useCardContext } from './context/CardContext';
+import PopupCard from './components/PopupCard';
 
 const App: React.FC = () => {
   return (
     <MovieProvider>
-      <Router>
-        <MainContent />
-      </Router>
+      <CardProvider>
+        <Router>
+          <MainContent />
+        </Router>
+      </CardProvider>
     </MovieProvider>
   );
 };
@@ -26,6 +30,9 @@ const MainContent: React.FC = () => {
     setIsModalOpen
   } = useMovieContext(); // Use context
 
+
+  const {cardState} = useCardContext();
+
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -36,8 +43,8 @@ const MainContent: React.FC = () => {
       <Modal movieData={selectedMovie} isOpen={isModalOpen} onClose={closeModal}>
         <h2>{selectedMovie?.title}</h2>
         <p>{selectedMovie?.overview}</p>
-        {/* Add more content as needed */}
       </Modal>
+      <PopupCard isHovered={cardState.isHovered} x={cardState.position?.x || 0} y={cardState.position?.y || 0} />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/watch/:id' element={<Watch />} />
