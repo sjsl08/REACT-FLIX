@@ -19,7 +19,7 @@ export const CardProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         item: null,
         isHovered: true,
         cardId: null,
-        position: { x: 0, y: 0 },
+        position: { x: -1000, y: 0 },
     });
 
     return (

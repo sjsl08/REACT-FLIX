@@ -8,11 +8,9 @@ import {
     Volume2,
     VolumeOff,
 } from 'lucide-react'; // Adjust the import path for icons
-// import { addedToFavoriteList, fetchTrailer, handleNoImageError } from '../utils/helpers'; // Adjust the import path
 import { useCardContext } from '../context/CardContext'; // Adjust the import path
 import { tmdbApi } from '../tmdbApi';
-
-import './PopupCard.css'
+import './PopupCard.css';
 import VideoPlayer from './VideoPlayer';
 import { useMovieContext } from '../context/MovieContext';
 import { Link } from 'react-router-dom';
@@ -34,7 +32,6 @@ const PopupCard: React.FC<PopupCardProps> = ({ isHovered, x, y }) => {
     const [trailerUrl, setTrailerUrl] = useState('');
     const [imageUrl, setImageUrl] = useState('');
     const [movieId, setMovieId] = useState<number>(0);
-    const [player, setPlayer] = useState<any>(null);
     const [showTrailer, setShowTrailer] = useState(false);
     const [title, setTitle] = useState('MOVIE');
     const [muted, setMuted] = useState(true);
@@ -46,37 +43,30 @@ const PopupCard: React.FC<PopupCardProps> = ({ isHovered, x, y }) => {
     const { setIsModalOpen } = useMovieContext(); // Use context
 
     useEffect(() => {
-
-
-        document.addEventListener('scroll', () => {
-            setCardState({
-                item: null,
+        const handleScroll = () => {
+            setCardState((prev: any) => ({
+                ...prev,
                 isHovered: false,
-                cardId: null,
-                position: { x: cardState.position?.x || 0, y: cardState.position?.y || 0 }
+            }));
+        };
 
-            });
-        });
-
-
-
-    }, [])
+        document.addEventListener('scroll', handleScroll);
+        return () => {
+            document.removeEventListener('scroll', handleScroll);
+        };
+    }, [setCardState]);
 
     useEffect(() => {
         if (cardState.item) {
             setImageUrl(`https://image.tmdb.org/t/p/w500${cardState.item.backdrop_path}`);
             setMovieId(cardState.item.id);
-            setTitle(cardState.item.title || "MOVIE");
+            setTitle(cardState.item.title || 'MOVIE');
             setFavData(cardState.item);
-
-
-
 
             const storedFavList = JSON.parse(localStorage.getItem('list') || '[]');
             setFavList(storedFavList);
-            setAddedToFavorite(storedFavList.some((m: Movie) => m.id === movieId));
+            setAddedToFavorite(storedFavList.some((m: Movie) => m.id === cardState.item.id));
 
-            // Fetch trailer URL
             const fetchTrailerUrl = async () => {
                 const url = await tmdbApi.getMovieTrailer(cardState.item.id);
                 setTrailerUrl(url.key);
@@ -92,63 +82,48 @@ const PopupCard: React.FC<PopupCardProps> = ({ isHovered, x, y }) => {
     };
 
     const handlePopoverMouseLeave = (e: React.MouseEvent) => {
-
-
         e.stopPropagation();
         setIsPopOverHovered(false);
-        setCardState({
+        setCardState((prev: any) => ({
+            ...prev,
             item: null,
             isHovered: false,
             cardId: null,
-            position: { x: cardState.position?.x || 0, y: cardState.position?.y || 0 }
-
-        });
-
-        console.log(cardState);
-
-        setShowTrailer(false);
-    };
-
-    const handleImageMouseEnter = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setShowTrailer(true);
-
-    };
-
-    const handleImageMouseEnterAction = () => {
+        }));
         setShowTrailer(false);
     };
 
     const toggleMuteAction = () => {
         setMuted(!muted);
-        if (player) {
-            player.toggleMute();
-        }
     };
 
     return (
         <div
-            className={`popup-card z-40 flex text-white flex-col transition-all duration-300 ${isHovered ? 'popup-scale-up opacity-100' : 'popup-scale-down opacity-0'}`}
+            className={`popup-card z-40 flex text-white flex-col transition-all duration-300 ${
+                isHovered ? 'popup-scale-up opacity-100' : 'popup-scale-down opacity-0'
+            }`}
             style={{
                 position: 'fixed',
                 top: `${y + 270}px`,
-                left: `${x < 200 ? x + 60 : window.innerWidth - x < 200 ? x - 60 : x}px`,
+                left: `${
+                    x < 200 ? x + 60 : window.innerWidth - x < 200 ? x - 60 : x
+                }px`,
                 width: '350px',
                 zIndex: 1000,
                 overflow: 'hidden',
             }}
             onMouseEnter={handlePopoverMouseEnter}
             onMouseLeave={handlePopoverMouseLeave}
-            role="presentation"
         >
-            <div className="relative w-full">
+            <div
+             onMouseEnter={() => setShowTrailer(true)}
+             onMouseLeave={() => setShowTrailer(false)}
+            className="relative w-full h-[198px]">
                 <div className="flex items-center">
                     <p className="absolute text-ellipsis z-50 top-36 left-2 font-semibold text-xl">
-                        {title.length > 25 ? title.substring(0, 25) + "..." : title}
+                        {title.length > 25 ? `${title.substring(0, 25)}...` : title}
                     </p>
-
                     <span
-                        role="presentation"
                         onClick={toggleMuteAction}
                         className="absolute cursor-pointer z-50 transition-colors duration-200 top-36 right-4 p-3 border-2 border-gray-700 rounded-full hover:border-white"
                     >
@@ -157,19 +132,13 @@ const PopupCard: React.FC<PopupCardProps> = ({ isHovered, x, y }) => {
                 </div>
 
                 {trailerUrl && showTrailer ? (
-                    <div className="pointer-events-none border-2 border-gray-700">
-                        <VideoPlayer
-                            pip
-                            isMuted={muted}
-                            videoId={trailerUrl}
-                        />
+                    <div className="pointer-events-none w-full h-full border-gray-700">
+                        <VideoPlayer pip isMuted={muted} videoId={trailerUrl} />
                     </div>
                 ) : imageUrl ? (
                     <img
                         className="w-full h-full object-cover"
                         src={imageUrl}
-                        // onError={handleNoImageError}
-                        onMouseEnter={handleImageMouseEnter}
                         alt="Poster"
                     />
                 ) : (
@@ -179,55 +148,46 @@ const PopupCard: React.FC<PopupCardProps> = ({ isHovered, x, y }) => {
                 )}
             </div>
 
-            {/* Action Buttons */}
-            <div
-                role="presentation"
-                onMouseEnter={handleImageMouseEnterAction}
-                className="flex justify-between items-center p-4"
-            >
+            <div className="flex justify-between items-center p-4">
                 <div className="flex space-x-2">
-                    <Link to={`/watch/${trailerUrl}`} className="rounded-full transition-colors duration-200 p-3 border-2 border-gray-700 hover:border-white">
+                    <Link
+                        to={`/watch/${trailerUrl}`}
+                        className="rounded-full transition-colors duration-200 p-3 border-2 border-gray-700 hover:border-white"
+                    >
                         <Play className="text-white h-6 w-6" />
                     </Link>
-
                     <button
                         onClick={() => {
                             setAddedToFavorite(!addedToFavorite);
-                            // addedToFavoriteList(favData);
                         }}
                         className="rounded-full transition-colors duration-200 p-3 border-2 border-gray-700 hover:border-white"
                     >
                         {addedToFavorite ? <Check className="text-white h-6 w-6" /> : <Plus className="text-white h-6 w-6" />}
                     </button>
-
-                    <button
-                        className="rounded-full transition-colors duration-200 p-3 border-2 border-gray-700 hover:border-white"
-                    >
+                    <button className="rounded-full transition-colors duration-200 p-3 border-2 border-gray-700 hover:border-white">
                         <ThumbsUp className="text-white h-6 w-6" />
                     </button>
                 </div>
-
-                <button onClick={() => {
-                    setIsModalOpen(true)
-                    setCardState({
-                        item: null,
-                        isHovered: false,
-                        cardId: null,
-                        position: { x: cardState.position?.x || 0, y: cardState.position?.y || 0 }
-
-                    });
-                }}
+                <button
+                    onClick={() => {
+                        setIsModalOpen(true);
+                        setCardState((prev: any) => ({
+                            ...prev,
+                            item: null,
+                            isHovered: false,
+                            cardId: null,
+                        }));
+                    }}
                     className="rounded-full transition-colors duration-200 p-3 border-2 border-gray-700 hover:border-white"
                 >
                     <ChevronDown className="text-white h-6 w-6" />
                 </button>
             </div>
 
-            {/* Movie Info */}
             <div className="p-4">
                 <div className="flex gap-3">
                     <span className="text-green-400">70% Match</span>
-                    <span className="border-2 border-gray-600 rounded-sm text-sm">13 +</span>
+                    <span className="border-2 border-gray-600 rounded-sm text-sm">13+</span>
                     <span className="font-bold">21m</span>
                     <span className="border-2 border-gray-600 rounded-sm text-sm">HD</span>
                 </div>
