@@ -10,14 +10,17 @@ import Modal from './components/Modal';
 import { useMovieContext } from './context/MovieContext'; // Import the context
 import { CardProvider, useCardContext } from './context/CardContext';
 import PopupCard from './components/PopupCard';
+import { UtilsProvider } from './context/UtilsContext';
 
 const App: React.FC = () => {
   return (
     <MovieProvider>
       <CardProvider>
-        <Router>
-          <MainContent />
-        </Router>
+        <UtilsProvider>
+          <Router>
+            <MainContent />
+          </Router>
+        </UtilsProvider>
       </CardProvider>
     </MovieProvider>
   );
@@ -31,7 +34,7 @@ const MainContent: React.FC = () => {
   } = useMovieContext(); // Use context
 
 
-  const {cardState} = useCardContext();
+  const { cardState } = useCardContext();
 
   const closeModal = () => {
     setIsModalOpen(false);

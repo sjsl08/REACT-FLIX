@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import Card from '../components/Card';
+import { useUtilsContext } from '../context/UtilsContext';
 
 const MyList: React.FC = () => {
-    const [movies, setMovies] = useState<Movie[]>([]); // Define Movie type if needed
+
+    const {movieList} = useUtilsContext()
+    const [movies, setMovies] = useState<Movie[]>(movieList); // Define Movie type if needed
+
+    // useEffect(() => {
+    //     const storedMovies = JSON.parse(localStorage.getItem('list') || "[]");
+    //     setMovies(storedMovies);
+    // }, []);
 
     useEffect(() => {
-        const storedMovies = JSON.parse(localStorage.getItem('list') || "[]");
-        setMovies(storedMovies);
-    }, []);
+        setMovies(movieList);
+    }, [movieList]);
 
     return (
         <div className="absolute top-36 flex flex-wrap left-12 gap-4">
