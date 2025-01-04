@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Search, Bell, ChevronRight, Menu, X } from 'lucide-react'
 import logo from '../assets/Netflix-LOGO.png'
 import profileImage from '../assets/profile.jpg'
@@ -10,6 +10,9 @@ const Navbar : React.FC = () => {
     const [isSearchActive, setIsSearchActive] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -36,6 +39,7 @@ const Navbar : React.FC = () => {
             console.log('Searching for:', searchQuery);
             setSearchQuery('');
             setIsSearchActive(false);
+            navigate(`/search/${encodeURIComponent(searchQuery)}`);
         }
     };
 
