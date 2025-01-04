@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import type { Movie } from './types/types'; // Adjust the import path as necessary
 
 interface MovieContextType {
     selectedMovie: Movie | null;
