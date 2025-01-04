@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { useCardContext } from './CardContext';
+import fallbackImage from '../assets/404.jpg';
 
 
 // Define the context value type
 interface UtilsContextValue {
   addToFavoriteList: (movie: Movie) => void;
+  handleNoImageError: (event: React.SyntheticEvent<HTMLImageElement, Event>) =>void; 
   movieList: Movie[];
 }
 
@@ -16,6 +18,17 @@ export const UtilsProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [movieList, setMovieList] = useState<Movie[]>([]);
 
     const {setCardState} = useCardContext()
+
+    const handleNoImageError = (event: React.SyntheticEvent<HTMLImageElement, Event>): void => {
+
+      const img = event.target as HTMLImageElement
+  
+      if (img.src !== fallbackImage) {
+          img.src = fallbackImage
+      }
+  
+  }
+  
 
   const addToFavoriteList = (movie: Movie) => {
     let list = localStorage.getItem('list');
@@ -54,7 +67,7 @@ export const UtilsProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   return (
-    <UtilsContext.Provider value={{ addToFavoriteList, movieList }}>
+    <UtilsContext.Provider value={{ addToFavoriteList, movieList,handleNoImageError }}>
       {children}
     </UtilsContext.Provider>
   );

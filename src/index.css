@@ -11,3 +11,13 @@ body{
 }
 
 
+iframe{
+    scale: 1.2;
+}
+
+@media (width < 768px) {
+    iframe{
+        scale: 2.2;
+    }
+}
+

@@ -77,7 +77,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, isMuted, toggleMute,
   return (
     <div
       ref={containerRef}
-      className={`relative ${pip ? 'h-[160px]' : 'h-screen'} bg-black flex justify-center items-center ${
+      className={`relative ${pip ? 'h-[160px]' : 'h-screen'} bg-white  ${
         location.pathname.startsWith('/watch') ? 'scale-100' : 'scale-150'
       }`}
       onMouseMove={handleMouseMove}
@@ -93,7 +93,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, isMuted, toggleMute,
         onProgress={handleProgress}
         width="100%"
         height="100%"
-        loop
+        loop={true}
         config={{
           youtube: {
             playerVars: {

@@ -39,6 +39,7 @@ const Navbar : React.FC = () => {
             console.log('Searching for:', searchQuery);
             setSearchQuery('');
             setIsSearchActive(false);
+            isMenuOpen && setIsMenuOpen(false);
             navigate(`/search/${encodeURIComponent(searchQuery)}`);
         }
     };
@@ -54,7 +55,7 @@ const Navbar : React.FC = () => {
                         <img src={logo} alt="NETFLIX LOGO" className="w-28" />
                     </Link>
 
-                    <nav className="hidden text-sm md:flex space-x-4">
+                    <nav className="hidden text-sm lg:flex space-x-4">
                         <Link to="/" className="hover:text-gray-300">Home</Link>
                         <Link to="/" className="hover:text-gray-300">TV Shows</Link>
                         <Link to="/" className="hover:text-gray-300">Movies</Link>
@@ -75,7 +76,6 @@ const Navbar : React.FC = () => {
                         }}
                     >
                         <button
-                            className="search-button"
                             aria-label="Toggle Search"
                             onClick={(e) => {
                                 e.stopPropagation();
@@ -127,34 +127,40 @@ const Navbar : React.FC = () => {
                     <X color="white" size={24} />
                 </button>
                 <div
-                    role="presentation"
-                    id="search-bar"
-                    className={`search-container ${isSearchActive ? "active" : ""}`}
-                    onClick={toggleSearch}
-                >
-                    <button
-                        className="search-button"
-                        aria-label="Toggle Search"
-                        onClick={toggleSearch}
+                        role="presentation"
+                        id="search-bar"
+                        className={`flex search-container ${isSearchActive ? "active" : ""}`}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            toggleSearch();
+                        }}
                     >
-                        <Search size={20} color="white" />
-                    </button>
-                    <input
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search"
-                        aria-label="Search"
-                        type="text"
-                        className="search-input"
-                        onKeyDown={handleSearch}
-                    />
-                </div>
+                        <button
+                            aria-label="Toggle Search"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                toggleSearch();
+                            }}
+                        >
+                            <Search className={isSearchActive? 'hidden' : ''} size={20} color="white" />
+                        </button>
+                        <input
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search"
+                            aria-label="Search"
+                            type="text"
+                            className="search-input"
+                            onKeyDown={handleSearch}
+                            onClick={(e) => e.stopPropagation()}
+                        />
+                    </div>
 
                 <Link to="/" className="hover:text-gray-300">Home</Link>
                 <Link to="/" className="hover:text-gray-300">TV Shows</Link>
                 <Link to="/" className="hover:text-gray-300">Movies</Link>
                 <Link to="/" className="hover:text-gray-300">New & Popular</Link>
-                <Link to="/" className="hover:text-gray-300">My List</Link>
+                <Link to="/myList" className="hover:text-gray-300">My List</Link>
                 <Link to="/" className="hover:text-gray-300">Browse By Languages</Link>
             </div>
 

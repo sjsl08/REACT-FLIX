@@ -7,9 +7,11 @@ interface CardProps {
 }
 
 import './Card.css'
+import { useUtilsContext } from '../context/UtilsContext';
 
 const Card: React.FC<CardProps> = ({ item }) => {
     const { setCardState, cardState } = useCardContext(); // Use context
+    const {handleNoImageError} = useUtilsContext(); // Use context
 
     const handleHover = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 
@@ -40,6 +42,7 @@ const Card: React.FC<CardProps> = ({ item }) => {
             role="presentation"
         >
             <img
+            onError={(e)=>{handleNoImageError(e)}}
                 src={`https://image.tmdb.org/t/p/w300${item.backdrop_path}`}
                 alt={item.title}
                 className="w-full h-auto"

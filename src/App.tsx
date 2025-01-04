@@ -11,7 +11,8 @@ import { useMovieContext } from './context/MovieContext'; // Import the context
 import { CardProvider, useCardContext } from './context/CardContext';
 import PopupCard from './components/PopupCard';
 import { UtilsProvider } from './context/UtilsContext';
-import Search  from './pages/Search'
+import Search from './pages/Search'
+import NotFound from './pages/NotFound';
 
 const App: React.FC = () => {
   return (
@@ -53,7 +54,8 @@ const MainContent: React.FC = () => {
         <Route path='/' element={<Home />} />
         <Route path='/watch/:id' element={<Watch />} />
         <Route path='/myList' element={<MyList />} />
-        <Route path="/search/:query" element={<Search/>} /> {/* Updated route */}
+        <Route path="/search/:query" element={<Search />} />
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </>
   );

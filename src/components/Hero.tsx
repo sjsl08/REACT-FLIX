@@ -68,7 +68,7 @@ const Hero: React.FC = () => {
 
             {/* movie details */}
             {selectedMovie && (
-                <div className="absolute top-[45%] pl-12 w-full z-10">
+                <div className="absolute top-[20%] lg:top-[45%] pl-12 w-full z-10">
                     <h1 className="text-4xl md:text-6xl font-bold mb-4 text-white">
                         {selectedMovie.title}
                     </h1>

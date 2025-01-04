@@ -35,7 +35,7 @@ const Search: React.FC = () => {
                     <Card key={index} item={item} /> // Pass the movie item to the Card component
                 ))
             ) : (
-                <p className="text-white text-xl">No movies in your list...</p>
+                <p className="text-white text-xl">No movies for the term ${query}</p>
             )}
         </div>
     );
