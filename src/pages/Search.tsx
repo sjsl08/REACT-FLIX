@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Card from '../components/Card';
+import Card from '../components/Card/Card';
 import { useParams } from 'react-router-dom';
 import { tmdbApi } from '../tmdbApi';
 
@@ -7,7 +7,6 @@ const Search: React.FC = () => {
 
     const { query } = useParams<{ query: string }>();
 
-    console.log(query);
 
     const [movies, setMovies] = useState<Movie[]>([]); // Define Movie type if needed
 
@@ -16,7 +15,6 @@ const Search: React.FC = () => {
             try {
                 const data = await tmdbApi.searchMovies(query || '', 1);
 
-                console.log(data);
 
                 setMovies(data);
 

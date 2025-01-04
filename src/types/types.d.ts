@@ -5,6 +5,12 @@ interface Movie {
     overview?: string;
 }
 
+interface GenreWithMovies {
+    id: number;
+    name: string;
+    movies: Movie[];
+}
+
 interface MovieDetails {
     adult: boolean;
     backdrop_path: string;
@@ -88,11 +94,11 @@ interface Trailer {
 }
 
 interface CardState{
-  isHovered:boolean;
-  cardId : number | string | null;
-  position : {x:number,y:number};
-  dimensions : {width:number,height:number};
-  item: Movie | null;
+  isHovered?:boolean;
+  cardId ?: number | string | null;
+  position ?: {x:number,y:number};
+  dimensions ?: {width:number,height:number};
+  item?: Movie | null;
 }
 
 interface ModalState {

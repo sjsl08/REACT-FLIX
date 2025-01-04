@@ -1,13 +1,12 @@
 import React from 'react';
-import { useCardContext } from '../context/CardContext'; // Adjust the import path
-import { Movie } from '../types/types'; // Adjust the import path as necessary
+import { useCardContext } from '../../context/CardContext'; // Adjust the import path
 
 interface CardProps {
     item: Movie;
 }
 
 import './Card.css'
-import { useUtilsContext } from '../context/UtilsContext';
+import { useUtilsContext } from '../../context/UtilsContext';
 
 const Card: React.FC<CardProps> = ({ item }) => {
     const { setCardState, cardState } = useCardContext(); // Use context
@@ -29,7 +28,6 @@ const Card: React.FC<CardProps> = ({ item }) => {
 
         });
 
-        console.log(cardState, item);
 
     };
 

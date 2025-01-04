@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Search, Bell, ChevronRight, Menu, X } from 'lucide-react'
-import logo from '../assets/Netflix-LOGO.png'
-import profileImage from '../assets/profile.jpg'
+import logo from '../../assets/Netflix-LOGO.png'
+import profileImage from '../../assets/profile.jpg'
 import './Navbar.css'
 
 const Navbar : React.FC = () => {
@@ -36,7 +36,6 @@ const Navbar : React.FC = () => {
     const handleSearch = (event: React.KeyboardEvent) => {
         if (event.key === 'Enter' && searchQuery.trim()) {
             // Handle search logic here
-            console.log('Searching for:', searchQuery);
             setSearchQuery('');
             setIsSearchActive(false);
             isMenuOpen && setIsMenuOpen(false);
@@ -82,7 +81,7 @@ const Navbar : React.FC = () => {
                                 toggleSearch();
                             }}
                         >
-                            <Search size={20} color="white" />
+                           {!isSearchActive && <Search size={20} color="white" />}
                         </button>
                         <input
                             value={searchQuery}

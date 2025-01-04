@@ -15,7 +15,7 @@ const UtilsContext = createContext<UtilsContextValue | undefined>(undefined);
 
 // Define the provider component
 export const UtilsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [movieList, setMovieList] = useState<Movie[]>([]);
+  const [movieList, setMovieList] = useState<Movie[]>(JSON.parse(localStorage.getItem('list') || '[]'));
 
     const {setCardState} = useCardContext()
 

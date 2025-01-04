@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface CardState {
-    item: any; // Replace `any` with your movie type
+    item: Movie | null; 
     isHovered: boolean;
     cardId: number | null;
     position?: { x: number; y: number } ;

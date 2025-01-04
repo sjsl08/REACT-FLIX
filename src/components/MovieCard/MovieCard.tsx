@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { tmdbApi, Movie } from '../tmdbApi';
+import { tmdbApi, Movie } from '../../tmdbApi';
 
 const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
   <div>

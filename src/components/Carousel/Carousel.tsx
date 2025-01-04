@@ -1,13 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react'; // Adjust the import path for icons
-import Card from './Card'; // Adjust the import path for your Card component
+import Card from '../Card/Card'; // Adjust the import path for your Card component
 import './Carousel.css';
 
-interface Movie {
-    id: number;
-    title: string;
-    backdrop_path: string;
-}
+
 
 interface CarouselProps {
     title: string;

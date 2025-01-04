@@ -8,19 +8,15 @@ import {
     Volume2,
     VolumeOff,
 } from 'lucide-react'; // Adjust the import path for icons
-import { useCardContext } from '../context/CardContext'; // Adjust the import path
-import { tmdbApi } from '../tmdbApi';
+import { useCardContext } from '../../context/CardContext'; // Adjust the import path
+import { tmdbApi } from '../../tmdbApi';
 import './PopupCard.css';
-import VideoPlayer from './VideoPlayer';
-import { useMovieContext } from '../context/MovieContext';
+import VideoPlayer from '../VideoPlayer/VideoPlayer';
+import { useMovieContext } from '../../context/MovieContext';
 import { Link } from 'react-router-dom';
-import { useUtilsContext } from '../context/UtilsContext';
+import { useUtilsContext } from '../../context/UtilsContext';
 
-interface Movie {
-    id: number;
-    title: string;
-    backdrop_path: string;
-}
+
 
 interface PopupCardProps {
     isHovered: boolean;
@@ -40,22 +36,27 @@ const PopupCard: React.FC<PopupCardProps> = ({ isHovered, x, y }) => {
     const [favData, setFavData] = useState<Movie | null>(null);
 
     const { cardState, setCardState } = useCardContext(); // Use context
-    const { setIsModalOpen } = useMovieContext(); // Use context
+    const { setIsModalOpen,setSelectedMovie } = useMovieContext(); // Use context
     const {addToFavoriteList,movieList} = useUtilsContext();
 
-    useEffect(() => {
+    
+    
+    useEffect(()=>{
         const handleScroll = () => {
-            setCardState((prev: any) => ({
-                ...prev,
-                isHovered: false,
-            }));
-        };
-
+            if(cardState.isHovered){
+    
+                setCardState((prev: any) => ({
+                    ...prev,
+                    isHovered: false,
+                }));
+            };
+            
+        }
         document.addEventListener('scroll', handleScroll);
         return () => {
             document.removeEventListener('scroll', handleScroll);
         };
-    }, [setCardState]);
+    },[])
 
     useEffect(() => {
         if (cardState.item) {
@@ -63,6 +64,8 @@ const PopupCard: React.FC<PopupCardProps> = ({ isHovered, x, y }) => {
             setMovieId(cardState.item.id);
             setTitle(cardState.item.title || 'MOVIE');
             setFavData(cardState.item);
+
+            
 
             let list = JSON.parse(localStorage.getItem('list') || '[]');
 
@@ -134,7 +137,7 @@ const PopupCard: React.FC<PopupCardProps> = ({ isHovered, x, y }) => {
 
                 {trailerUrl && showTrailer ? (
                     <div className="pointer-events-none w-full h-full border-gray-700">
-                        <VideoPlayer pip isMuted={muted} videoId={trailerUrl} />
+                        <VideoPlayer pip={true} isMuted={muted} videoId={trailerUrl} />
                     </div>
                 ) : imageUrl ? (
                     <img
@@ -159,7 +162,7 @@ const PopupCard: React.FC<PopupCardProps> = ({ isHovered, x, y }) => {
                     </Link>
                     <button
                         onClick={() => {
-                            addToFavoriteList(favData);
+                            addToFavoriteList(favData as Movie);
                             setAddedToFavorite(!addedToFavorite);
                         }}
                         className="rounded-full transition-colors duration-200 p-3 border-2 border-gray-700 hover:border-white"
@@ -173,6 +176,7 @@ const PopupCard: React.FC<PopupCardProps> = ({ isHovered, x, y }) => {
                 <button
                     onClick={() => {
                         setIsModalOpen(true);
+                        setSelectedMovie(favData as Movie);
                         setCardState((prev: any) => ({
                             ...prev,
                             item: null,

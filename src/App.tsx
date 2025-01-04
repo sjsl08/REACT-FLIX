@@ -4,12 +4,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Watch from './pages/Watch';
 import MyList from './pages/MyList';
-import Navbar from './components/Navbar';
+import Navbar from './components/Navbar/Navbar';
 import { MovieProvider } from './context/MovieContext';
-import Modal from './components/Modal';
+import Modal from './components/Modal/Modal';
 import { useMovieContext } from './context/MovieContext'; // Import the context
 import { CardProvider, useCardContext } from './context/CardContext';
-import PopupCard from './components/PopupCard';
+import PopupCard from './components/PopupCard/PopupCard';
 import { UtilsProvider } from './context/UtilsContext';
 import Search from './pages/Search'
 import NotFound from './pages/NotFound';
@@ -32,6 +32,8 @@ const MainContent: React.FC = () => {
   const {
     selectedMovie,
     isModalOpen,
+    playerMuted,
+    setPlayerMuted,
     setIsModalOpen
   } = useMovieContext(); // Use context
 
@@ -45,10 +47,10 @@ const MainContent: React.FC = () => {
   return (
     <>
       <Navbar />
-      <Modal movieData={selectedMovie} isOpen={isModalOpen} onClose={closeModal}>
+     {selectedMovie && <Modal movieData={selectedMovie} isOpen={isModalOpen} muted={playerMuted} toggleMuteVideo={()=>{setPlayerMuted(!playerMuted)}}  onClose={closeModal}>
         <h2>{selectedMovie?.title}</h2>
         <p>{selectedMovie?.overview}</p>
-      </Modal>
+      </Modal>}
       <PopupCard isHovered={cardState.isHovered} x={cardState.position?.x || 0} y={cardState.position?.y || 0} />
       <Routes>
         <Route path='/' element={<Home />} />

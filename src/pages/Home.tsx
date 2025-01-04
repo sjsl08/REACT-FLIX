@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useMovieContext } from '../context/MovieContext'; // Import the context
 import { tmdbApi } from '../tmdbApi';
-import Hero from '../components/Hero'; // Assuming you have a Hero component
-import Carousel from '../components/Carousel';
+import Hero from '../components/Hero/Hero'; // Assuming you have a Hero component
+import Carousel from '../components/Carousel/Carousel';
 
-interface GenreWithMovies {
-    id: number;
-    name: string;
-    movies: Movie[];
-}
+
 
 const Home: React.FC = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);

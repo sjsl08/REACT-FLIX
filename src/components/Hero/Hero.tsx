@@ -2,9 +2,9 @@
 import React, { useEffect } from 'react';
 import { Play, Info, Volume2, VolumeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import VideoPlayer from './VideoPlayer';
-import { useMovieContext } from '../context/MovieContext'; // Import the context
-import { tmdbApi } from '../tmdbApi';
+import VideoPlayer from '../VideoPlayer/VideoPlayer';
+import { useMovieContext } from '../../context/MovieContext'; // Import the context
+import { tmdbApi } from '../../tmdbApi';
 
 
 const Hero: React.FC = () => {
@@ -20,7 +20,6 @@ const Hero: React.FC = () => {
 
     useEffect(() => {
 
-        console.log(trailerURL);
         
         const fetchTrailer = async () => {
             if (selectedMovie) {
@@ -46,14 +45,12 @@ const Hero: React.FC = () => {
         <main className="relative overflow-hidden">
             {/* Video Player */}
             {trailerURL && (
-                <div className='border-2 border-red-500'>
 
                 <VideoPlayer
                     videoId={trailerURL}
                     isMuted={playerMuted}
                     toggleMute={toggleMute}
                     />
-                    </div>
             )}
 
             {selectedMovie && !trailerURL && (
@@ -68,9 +65,9 @@ const Hero: React.FC = () => {
 
             {/* movie details */}
             {selectedMovie && (
-                <div className="absolute top-[20%] lg:top-[45%] pl-12 w-full z-10">
+                <div className="absolute top-[38%]  pl-12 w-full z-10">
                     <h1 className="text-4xl md:text-6xl font-bold mb-4 text-white">
-                        {selectedMovie.title}
+                        {selectedMovie.title.length > 30 && window.innerWidth < 768 ? selectedMovie.title.substring(0, 30) + "..." : selectedMovie.title}
                     </h1>
 
                     <p className="text-sm md:text-lg hidden md:block mb-6 max-w-lg text-gray-300">
